@@ -93,8 +93,3 @@ do
 	done
 	echo
 done
-
-echo "This tester is not enough to validate the project, remember to also test :
-- norm
-- leaks
-- each program without a 5th argument"
