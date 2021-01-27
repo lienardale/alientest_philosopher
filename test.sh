@@ -23,7 +23,9 @@ do
 
 	while [ $av_5 -le 10 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
+		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
+		# BACK_PID=$!
+		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc)
 		ok=$(echo $test | grep $nb)
@@ -50,7 +52,9 @@ do
 
 	while [ $av_5 -le 10 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
+		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
+		# BACK_PID=$!
+		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc)
 		ok=$(echo $test | grep $nb)
@@ -77,7 +81,9 @@ do
 
 	while [ $av_5 -le 11 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
+		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
+		# BACK_PID=$!
+		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep died)
 		# ok=$(echo $test | grep $nb)

@@ -11,4 +11,9 @@ fi
 
 make -C ../$philo
 
-./../$philo/$philo $2 $3 $4 $5
+if [ $6 != "" ];
+then
+	./../$philo/$philo $2 $3 $4 $5 $6
+else
+	./../$philo/$philo $2 $3 $4 $5
+fi
