@@ -13,4 +13,9 @@ fi
 
 make -C ../$philo
 
-valgrind --leak-check=full --show-leak-kinds=all ./../$philo/$philo $2 $3 $4 $5
+if [ $6 != "" ];
+then
+	valgrind --leak-check=full --show-leak-kinds=all ./../$philo/$philo $2 $3 $4 $5 $6
+else
+	valgrind --leak-check=full --show-leak-kinds=all ./../$philo/$philo $2 $3 $4 $5
+fi
