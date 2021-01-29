@@ -97,5 +97,38 @@ do
 		fi
 		av_5=$(( $av_5 + 1 ))
 	done
+
+	echo
+	echo GOING BIG 50 1300 100 100 X
+
+	av_1=50
+	av_2=1300
+	av_3=100
+	av_4=100
+	av_5=1
+
+	while [ $av_5 -le 10 ]
+	do
+		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
+		# BACK_PID=$!
+		# wait $BACK_PID
+		nb=$(( av_1*av_5 ))
+		test=$(cat test.log | grep eating | wc)
+		ok=$(echo $test | grep $nb)
+		if [ -z "$ok" ];
+		then
+			echo -n "Test $av_5 :"
+			echo -ne "\033[0;31m x	\033[0m"
+		else
+			echo -n "Test $av_5 :"
+			echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+		fi
+		av_5=$(( $av_5 + 1 ))
+	done
+
+
 	echo
 done
+
+
+#  ps aux | grep -ie $philo | awk '{print $2}' | xargs kill -9
