@@ -164,8 +164,8 @@ bash valgrind.sh 1 2 10 5 5
 bash valgrind.sh 2 2 10 5 5
 bash valgrind.sh 3 2 10 5 5
 
-bash valgrind.sh 1 2 10000 5 5 1
-bash valgrind.sh 2 2 10000 5 5 1
-bash valgrind.sh 3 2 10000 5 5 1
+bash valgrind.sh 1 2 10000 5000 5 1
+bash valgrind.sh 2 2 10000 5000 5 1
+bash valgrind.sh 3 2 10000 5000 5 1
 
 #  ps aux | grep -ie $philo | awk '{print $2}' | xargs kill -9
