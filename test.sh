@@ -1,4 +1,15 @@
 #!/bin/bash
+
+norm=$(~/.norminette/norminette.rb ../ | grep Error)
+if [ -z "$norm" ];
+then
+	echo -n "Norm :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Norm :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+
 make -C ../philo_one
 make -C ../philo_two
 make -C ../philo_three
@@ -130,5 +141,24 @@ do
 	echo
 done
 
+bash one.sh 1 1 10 5 5 
+bash one.sh 2 1 10 5 5 
+bash one.sh 3 1 10 5 5 
+
+bash one.sh 1 1 10 5 5 1
+bash one.sh 2 1 10 5 5 1
+bash one.sh 3 1 10 5 5 1
+
+bash one.sh 1 200 1300 100 100
+bash one.sh 2 200 1300 100 100
+bash one.sh 3 200 1300 100 100
+
+bash valgrind.sh 1 2 10 5 5
+bash valgrind.sh 2 2 10 5 5
+bash valgrind.sh 3 2 10 5 5
+
+bash valgrind.sh 1 2 10000 5 5 1
+bash valgrind.sh 2 2 10000 5 5 1
+bash valgrind.sh 3 2 10000 5 5 1
 
 #  ps aux | grep -ie $philo | awk '{print $2}' | xargs kill -9
