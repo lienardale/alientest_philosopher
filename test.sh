@@ -8,6 +8,8 @@ then
 else
 	echo -n "Norm :"
 	echo -ne "\033[0;31m x	\033[0m"
+	echo $norm
+	exit
 fi
 
 make -C ../philo_one
@@ -149,9 +151,14 @@ bash one.sh 1 1 10 5 5 1
 bash one.sh 2 1 10 5 5 1
 bash one.sh 3 1 10 5 5 1
 
-bash one.sh 1 200 1300 100 100
-bash one.sh 2 200 1300 100 100
-bash one.sh 3 200 1300 100 100
+bash one.sh 1 200 200 100 100 | grep died
+bash one.sh 2 200 200 100 100 | grep died
+bash one.sh 3 200 200 100 100 | grep died
+
+bash one.sh 1 200 1300 100 100 10 | grep eating | wc
+bash one.sh 2 200 1300 100 100 10 | grep eating | wc
+bash one.sh 3 200 1300 100 100 10 > test.log
+cat test.log | grep eating | wc
 
 bash valgrind.sh 1 2 10 5 5
 bash valgrind.sh 2 2 10 5 5
