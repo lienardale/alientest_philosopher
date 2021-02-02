@@ -155,9 +155,9 @@ bash one.sh 1 200 200 100 100 | grep died
 bash one.sh 2 200 200 100 100 | grep died
 bash one.sh 3 200 200 100 100 | grep died
 
-bash one.sh 1 200 1300 100 100 10 | grep eating | wc
-bash one.sh 2 200 1300 100 100 10 | grep eating | wc
-bash one.sh 3 200 1300 100 100 10 | tee > test.log
+bash one.sh 1 200 13000 100 100 10 | grep eating | wc
+bash one.sh 2 200 13000 100 100 10 | grep eating | wc
+bash one.sh 3 200 13000 100 100 10 | tee > test.log
 cat test.log | grep eating | wc
 
 bash valgrind.sh 1 2 10 5 5
