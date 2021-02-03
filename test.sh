@@ -164,7 +164,7 @@ else
 fi
 echo
 test=$(bash one.sh 3 1 10 5 5 | grep died)
-if [  -z "$test" ];
+if [ ! -z "$test" ];
 then
 	echo -n "Test 1 philosophe - philo_three :"
 	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
