@@ -211,7 +211,7 @@ then
 	echo -n "Test 200 philosophes - philo_one :"
 	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
 else
-	echo -n "Test 200 philosophe + av5 - philo_one :"
+	echo -n "Test 200 philosophes + av5 - philo_one :"
 	echo -ne "\033[0;31m x	\033[0m"
 fi
 echo
@@ -221,7 +221,7 @@ then
 	echo -n "Test 200 philosophes - philo_two :"
 	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
 else
-	echo -n "Test 200 philosophe + av5 - philo_two :"
+	echo -n "Test 200 philosophes + av5 - philo_two :"
 	echo -ne "\033[0;31m x	\033[0m"
 fi
 echo
@@ -231,20 +231,48 @@ then
 	echo -n "Test 200 philosophes - philo_three :"
 	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
 else
-	echo -n "Test 200 philosophe + av5 - philo_three :"
+	echo -n "Test 200 philosophes + av5 - philo_three :"
 	echo -ne "\033[0;31m x	\033[0m"
 fi
 echo
-echo "These are heavy, if result =/= 2000, rerun then outside of script to check."
-bash one.sh 1 200 13000 100 100 10 | grep eating | wc
-bash one.sh 2 200 13000 100 100 10 | grep eating | wc
-bash one.sh 3 200 13000 100 100 10 | tee > test.log
-cat test.log | grep eating | wc
 
+echo "These are heavy, if result =/= 2000, rerun then outside of script to check."
+
+test=$(bash one.sh 1 200 13000 100 100 10 | grep eating | wc | cut -b 5,6,7,8)
+if [ "$test" == 2000 ];
+then
+	echo -n "Test 200 philosophes + av5 - philo_one :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 200 philosophes + av5 - philo_one :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
+
+test=$(bash one.sh 2 200 13000 100 100 10 | grep eating | wc | cut -b 5,6,7,8)
+if [ "$test" == 2000 ];
+then
+	echo -n "Test 200 philosophes + av5 - philo_two :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 200 philosophes + av5 - philo_two :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+
+echo
+test=$(bash one.sh 3 200 13000 100 100 10 | grep eating | wc | cut -b 5,6,7,8)
+if [ "$test" == 2000 ];
+then
+	echo -n "Test 200 philosophes + av5 - philo_three :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 200 philosophes + av5 - philo_three :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
 
 echo "To test leaks, check leak.log, if no valgrind, re-run script on VM and consider only these tests' results."
 bash valgrind.sh 1 2 10 5 5 2> leak.log
-
 bash valgrind.sh 2 2 10 5 5 2>> leak.log
 bash valgrind.sh 3 2 10 5 5 2>> leak.log
 
