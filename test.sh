@@ -9,9 +9,9 @@ else
 	echo -n "Norm :"
 	echo -ne "\033[0;31m x	\033[0m"
 	echo $norm
-	exit
+	# exit
 fi
-
+echo
 make -C ../philo_one
 make -C ../philo_two
 make -C ../philo_three
@@ -143,29 +143,113 @@ do
 	echo
 done
 
-bash one.sh 1 1 10 5 5 
-bash one.sh 2 1 10 5 5 
-bash one.sh 3 1 10 5 5 
+test=$(bash one.sh 1 1 10 5 5 | grep died)
+if [ ! -z "$test" ];
+then
+	echo -n "Test 1 philosophe - philo_one :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 1 philosophe - philo_one :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
+test=$(bash one.sh 2 1 10 5 5 | grep died)
+if [ ! -z "$test" ];
+then
+	echo -n "Test 1 philosophe - philo_two :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 1 philosophe - philo_two :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
+test=$(bash one.sh 3 1 10 5 5 | grep died)
+if [  -z "$test" ];
+then
+	echo -n "Test 1 philosophe - philo_three :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 1 philosophe - philo_three :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
 
-bash one.sh 1 1 10 5 5 1
-bash one.sh 2 1 10 5 5 1
-bash one.sh 3 1 10 5 5 1
+test=$(bash one.sh 1 1 10 5 5 1 | grep died)
+if [ ! -z "$test" ];
+then
+	echo -n "Test 1 philosophe + av5 - philo_one :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 1 philosophe + av5 - philo_one :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
+test=$(bash one.sh 2 1 10 5 5 1 | grep died)
+if [ ! -z "$test" ];
+then
+	echo -n "Test 1 philosophe + av5 - philo_two :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 1 philosophe + av5 - philo_two :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
+test=$(bash one.sh 3 1 10 5 5 1 | grep died)
+if [ ! -z "$test" ];
+then
+	echo -n "Test 1 philosophe + av5 - philo_three :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 1 philosophe + av5 - philo_three :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
 
-bash one.sh 1 200 200 100 100 | grep died
-bash one.sh 2 200 200 100 100 | grep died
-bash one.sh 3 200 200 100 100 | grep died
-
+test=$(bash one.sh 1 200 200 100 100 | grep died)
+if [ ! -z "$test" ];
+then
+	echo -n "Test 200 philosophes - philo_one :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 200 philosophe + av5 - philo_one :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
+test=$(bash one.sh 2 200 200 100 100 | grep died)
+if [ ! -z "$test" ];
+then
+	echo -n "Test 200 philosophes - philo_two :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 200 philosophe + av5 - philo_two :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
+test=$(bash one.sh 3 200 200 100 100 | grep died)
+if [ ! -z "$test" ];
+then
+	echo -n "Test 200 philosophes - philo_three :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Test 200 philosophe + av5 - philo_three :"
+	echo -ne "\033[0;31m x	\033[0m"
+fi
+echo
+echo "These are heavy, if result =/= 2000, rerun then outside of script to check."
 bash one.sh 1 200 13000 100 100 10 | grep eating | wc
 bash one.sh 2 200 13000 100 100 10 | grep eating | wc
 bash one.sh 3 200 13000 100 100 10 | tee > test.log
 cat test.log | grep eating | wc
 
-bash valgrind.sh 1 2 10 5 5
-bash valgrind.sh 2 2 10 5 5
-bash valgrind.sh 3 2 10 5 5
 
-bash valgrind.sh 1 2 10000 5000 5 1
-bash valgrind.sh 2 2 10000 5000 5 1
-bash valgrind.sh 3 2 10000 5000 5 1
+echo "To test leaks, check leak.log, if no valgrind, re-run script on VM and consider only these tests' results."
+bash valgrind.sh 1 2 10 5 5 2> leak.log
+
+bash valgrind.sh 2 2 10 5 5 2>> leak.log
+bash valgrind.sh 3 2 10 5 5 2>> leak.log
+
+bash valgrind.sh 1 2 10000 5000 5 1 2>> leak.log
+bash valgrind.sh 2 2 10000 5000 5 1 2>> leak.log
+bash valgrind.sh 3 2 10000 5000 5 1 2>> leak.log
 
 #  ps aux | grep -ie $philo | awk '{print $2}' | xargs kill -9

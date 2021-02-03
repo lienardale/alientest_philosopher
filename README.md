@@ -1,5 +1,7 @@
 # alientest_philosopher
 
+Clone this repo at your philosopher's root (at the same level of your philo_one, philo_two and philo_three directories).
+
 Usage : 'bash test.sh'
 
 How to read the output : 
