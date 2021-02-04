@@ -40,9 +40,8 @@ do
 		# BACK_PID=$!
 		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
-		test=$(cat test.log | grep eating | wc)
-		ok=$(echo $test | grep $nb)
-		if [ -z "$ok" ];
+		test=$(cat test.log | grep eating | wc | cut -b 7,8)
+		if [ "$test" -lt "$nb" ];
 		then
 			echo -n "Test $av_5 :"
 			echo -ne "\033[0;31m x	\033[0m"
@@ -69,9 +68,8 @@ do
 		# BACK_PID=$!
 		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
-		test=$(cat test.log | grep eating | wc)
-		ok=$(echo $test | grep $nb)
-		if [ -z "$ok" ];
+		test=$(cat test.log | grep eating | wc | cut -b 7,8)
+		if [ "$test" -lt "$nb" ];
 		then
 			echo -n "Test $av_5 :"
 			echo -ne "\033[0;31m x	\033[0m"
@@ -99,7 +97,6 @@ do
 		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep died)
-		# ok=$(echo $test | grep $nb)
 		if [ -z "$test" ];
 		then
 			echo -n "Test $av_5 :"
@@ -126,9 +123,8 @@ do
 		# BACK_PID=$!
 		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
-		test=$(cat test.log | grep eating | wc)
-		ok=$(echo $test | grep $nb)
-		if [ -z "$ok" ];
+		test=$(cat test.log | grep eating | wc | cut -b 6,7,8)
+		if [ "$test" -lt "$nb" ];
 		then
 			echo -n "Test $av_5 :"
 			echo -ne "\033[0;31m x	\033[0m"
@@ -239,7 +235,7 @@ echo
 echo "These are heavy, if result =/= 2000, rerun then outside of script to check."
 
 test=$(bash one.sh 1 200 13000 100 100 10 | grep eating | wc | cut -b 5,6,7,8)
-if [ "$test" == 2000 ];
+if [ "$test" -ge 2000 ];
 then
 	echo -n "Test 200 philosophes + av5 - philo_one :"
 	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
@@ -250,7 +246,7 @@ fi
 echo
 
 test=$(bash one.sh 2 200 13000 100 100 10 | grep eating | wc | cut -b 5,6,7,8)
-if [ "$test" == 2000 ];
+if [ "$test" -ge 2000 ];
 then
 	echo -n "Test 200 philosophes + av5 - philo_two :"
 	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
@@ -261,7 +257,7 @@ fi
 
 echo
 test=$(bash one.sh 3 200 13000 100 100 10 | grep eating | wc | cut -b 5,6,7,8)
-if [ "$test" == 2000 ];
+if [ "$test" -ge 2000 ];
 then
 	echo -n "Test 200 philosophes + av5 - philo_three :"
 	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
