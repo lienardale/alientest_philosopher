@@ -1,5 +1,18 @@
 #!/bin/bash
 
+if [ "$(uname -s)" != "Linux"]
+then
+	cut_0=5
+	cut_1=6
+	cut_2=7
+	cut_3=8
+else
+	cut_0=4
+	cut_1=5
+	cut_2=6
+	cut_3=7
+fi
+
 norm=$(~/.norminette/norminette.rb ../ | grep Error)
 if [ -z "$norm" ];
 then
