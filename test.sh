@@ -1,13 +1,5 @@
 #!/bin/bash
 
-RED="\e[91m"
-GREEN="\e[92m"
-YELLOW="\e[93m"
-BLUE="\e[94m"
-PURPLE="\e[95m"
-CYAN="\e[96m"
-WHITE="\e[97m"
-
 echo -e $YELLOW
 echo "If you are still developing and this tester causes you to have multiple processes still alive, use this to kill them :
  ' ps aux | grep -ie YOUR_PHILO_NAME | awk '{print $2}' | xargs kill -9 ' "
@@ -19,11 +11,25 @@ then
 	cut_1=6
 	cut_2=7
 	cut_3=8
+	RED="\033[91m"
+	GREEN="\033[92m"
+	YELLOW="\033[93m"
+	BLUE="\033[94m"
+	PURPLE="\033[95m"
+	CYAN="\033[96m"
+	WHITE="\033[97m"
 else
 	cut_0=4
 	cut_1=5
 	cut_2=6
 	cut_3=7
+	RED="\e[91m"
+	GREEN="\e[92m"
+	YELLOW="\e[93m"
+	BLUE="\e[94m"
+	PURPLE="\e[95m"
+	CYAN="\e[96m"
+	WHITE="\e[97m"
 fi
 
 echo "Testing Norm"
