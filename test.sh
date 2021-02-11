@@ -5,6 +5,13 @@ echo "If you are still developing and this tester causes you to have multiple pr
  ' ps aux | grep -ie YOUR_PHILO_NAME | awk '{print $2}' | xargs kill -9 ' "
 echo -e $WHITE
 
+echo -e $YELLOW
+echo "If you want to test all philo -> 'bash test.sh'
+To test only philo_one : 'bash test.sh 1'
+To test only philo_two : 'bash test.sh 2'
+To test only philo_three : 'bash test.sh 3'"
+echo -e $WHITE
+
 if [ "$(uname -s)" != "Linux" ]
 then
 	cut_0=5
@@ -50,7 +57,18 @@ make -C ../philo_one
 make -C ../philo_two
 make -C ../philo_three
 
-PHILOSOPHES=( philo_one philo_two philo_three )
+if [ "$1" == "1" ];
+then
+	PHILOSOPHES=( philo_one )
+elif [ "$1" == 2 ];
+then
+	PHILOSOPHES=( philo_two )
+elif [ "$1" == 3 ];
+then
+	PHILOSOPHES=( philo_three )
+else
+	PHILOSOPHES=( philo_one philo_two philo_three )
+fi
 
 for philosophe in ${PHILOSOPHES[*]}
 do 
@@ -178,140 +196,68 @@ do
 		fi
 		av_5=$(( $av_5 + 1 ))
 	done
-
-
 	echo
+
+	echo -ne $GREEN
+	echo ONLY ONE PHILOSOPHE
+	echo -ne $WHITE
+	test=$(./../$philo/$philo 1 10 5 5 | grep died)
+	if [ ! -z "$test" ];
+	then
+		echo -n "Test with only one philosophe - $philo :"
+		echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+	else
+		echo -n "Test with only one philosophe - $philo :"
+		echo -ne "\033[0;31m x	\033[0m"
+	fi
+	echo
+
+	echo -ne $GREEN
+	echo ONLY ONE PHILOSOPHE + av_5
+	echo -ne $WHITE
+	test=$(./../$philo/$philo 1 10 5 5 1 | grep died)
+	if [ ! -z "$test" ];
+	then
+		echo -n "Test with only one philosophe + av5 - $philo :"
+		echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+	else
+		echo -n "Test with only one philosophe + av5 - $philo :"
+		echo -ne "\033[0;31m x	\033[0m"
+	fi
+	echo
+
+	echo -ne $GREEN
+	echo 200 PHILOSOPHES
+	echo -ne $WHITE
+	test=$(./../$philo/$philo 200 200 100 100 | grep died)
+	if [ ! -z "$test" ];
+	then
+		echo -n "Test 200 philosophes - $philo :"
+		echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+	else
+		echo -n "Test 200 philosophes + av5 - $philo :"
+		echo -ne "\033[0;31m x	\033[0m"
+	fi
+	echo
+
+	echo -ne $CYAN
+	echo "This one is heavy, if fail, rerun it outside of script to check."
+	echo -ne $WHITE
+	echo -ne $GREEN
+	echo 200 PHILOSOPHES + av_5
+	echo -ne $WHITE
+	test=$(./../$philo/$philo 200 13000 100 100 10 | grep eating | wc | cut -b $cut_0,$cut_1,$cut_2,$cut_3)
+	if [ "$test" -ge 2000 ];
+	then
+		echo -n "Test 200 philosophes + av5 - $philo :"
+		echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+	else
+		echo -n "Test 200 philosophes + av5 - $philo :"
+		echo -ne "\033[0;31m x	\033[0m"
+	fi
+	echo
+
 done
-
-echo
-test=$(bash one.sh 1 1 10 5 5 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test with only one philosophe - philo_one :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test with only one philosophe - philo_one :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-test=$(bash one.sh 2 1 10 5 5 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test with only one philosophe - philo_two :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test with only one philosophe - philo_two :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-test=$(bash one.sh 3 1 10 5 5 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test with only one philosophe - philo_three :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test with only one philosophe - philo_three :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-
-test=$(bash one.sh 1 1 10 5 5 1 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test with only one philosophe + av5 - philo_one :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test with only one philosophe + av5 - philo_one :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-test=$(bash one.sh 2 1 10 5 5 1 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test with only one philosophe + av5 - philo_two :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test with only one philosophe + av5 - philo_two :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-test=$(bash one.sh 3 1 10 5 5 1 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test with only one philosophe + av5 - philo_three :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test with only one philosophe + av5 - philo_three :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-
-test=$(bash one.sh 1 200 200 100 100 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test 200 philosophes - philo_one :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test 200 philosophes + av5 - philo_one :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-test=$(bash one.sh 2 200 200 100 100 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test 200 philosophes - philo_two :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test 200 philosophes + av5 - philo_two :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-test=$(bash one.sh 3 200 200 100 100 | grep died)
-if [ ! -z "$test" ];
-then
-	echo -n "Test 200 philosophes - philo_three :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test 200 philosophes + av5 - philo_three :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-
-echo -ne $CYAN
-echo "These are heavy, if fail, rerun then outside of script to check."
-echo -ne $WHITE
-test=$(bash one.sh 1 200 13000 100 100 10 | grep eating | wc | cut -b $cut_0,$cut_1,$cut_2,$cut_3)
-if [ "$test" -ge 2000 ];
-then
-	echo -n "Test 200 philosophes + av5 - philo_one :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test 200 philosophes + av5 - philo_one :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
-
-test=$(bash one.sh 2 200 13000 100 100 10 | grep eating | wc | cut -b $cut_0,$cut_1,$cut_2,$cut_3)
-if [ "$test" -ge 2000 ];
-then
-	echo -n "Test 200 philosophes + av5 - philo_two :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test 200 philosophes + av5 - philo_two :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-
-echo
-test=$(bash one.sh 3 200 13000 100 100 10 | grep eating | wc | cut -b $cut_0,$cut_1,$cut_2,$cut_3)
-if [ "$test" -ge 2000 ];
-then
-	echo -n "Test 200 philosophes + av5 - philo_three :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Test 200 philosophes + av5 - philo_three :"
-	echo -ne "\033[0;31m x	\033[0m"
-fi
-echo
 
 echo
 echo -ne $CYAN
@@ -319,13 +265,35 @@ echo "To test leaks, check leak.log, if no valgrind, re-run script on VM and con
 echo -ne $WHITE
 echo
 
-bash valgrind.sh 1 2 10 5 5 2> leak.log
-bash valgrind.sh 2 2 10 5 5 2>> leak.log
-bash valgrind.sh 3 2 10 5 5 2>> leak.log
+rm leak.log
 
-bash valgrind.sh 1 2 10000 5000 5 1 2>> leak.log
-bash valgrind.sh 2 2 10000 5000 5 1 2>> leak.log
-bash valgrind.sh 3 2 10000 5000 5 1 2>> leak.log
+for leak in ${PHILOSOPHES[*]}
+do 
+	philo=$leak
+
+	echo -ne $GREEN >> leak.log
+	echo $philo >> leak.log
+	echo -ne $WHITE >> leak.log
+	av_1=2
+	av_2=10
+	av_3=5
+	av_4=5
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>> leak.log
+	av_1=2
+	av_2=10000
+	av_3=5000
+	av_4=5
+	av_5=1
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>> leak.log
+done 
+
+# bash valgrind.sh 1 2 10 5 5 2> leak.log
+# bash valgrind.sh 2 2 10 5 5 2>> leak.log
+# bash valgrind.sh 3 2 10 5 5 2>> leak.log
+
+# bash valgrind.sh 1 2 10000 5000 5 1 2>> leak.log
+# bash valgrind.sh 2 2 10000 5000 5 1 2>> leak.log
+# bash valgrind.sh 3 2 10000 5000 5 1 2>> leak.log
 echo
 echo -ne $CYAN
 echo "Valgrind tests finished to execute, check leak.log :
