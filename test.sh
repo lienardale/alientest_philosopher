@@ -49,7 +49,6 @@ else
 	echo -n "Norm :"
 	echo -ne "\033[0;31m x	\033[0m"
 	echo $norm
-	# exit
 fi
 echo
 
@@ -72,7 +71,6 @@ fi
 
 for philosophe in ${PHILOSOPHES[*]}
 do 
-	# PHILO_ONE
 	echo
 	echo -ne $CYAN
 	echo $philosophe
@@ -93,8 +91,6 @@ do
 	while [ $av_5 -le 10 ]
 	do
 		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
-		# BACK_PID=$!
-		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc | cut -b $cut_2,$cut_3)
 		if [ "$test" -lt "$nb" ];
@@ -123,8 +119,6 @@ do
 	while [ $av_5 -le 10 ]
 	do
 		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
-		# BACK_PID=$!
-		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc | cut -b $cut_2,$cut_3)
 		if [ "$test" -lt "$nb" ];
@@ -153,8 +147,6 @@ do
 	while [ $av_5 -le 11 ]
 	do
 		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
-		# BACK_PID=$!
-		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep died)
 		if [ -z "$test" ];
@@ -182,8 +174,6 @@ do
 	while [ $av_5 -le 10 ]
 	do
 		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
-		# BACK_PID=$!
-		# wait $BACK_PID
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc | cut -b $cut_1,$cut_2,$cut_3)
 		if [ "$test" -lt "$nb" ];
@@ -271,29 +261,40 @@ for leak in ${PHILOSOPHES[*]}
 do 
 	philo=$leak
 
-	echo -ne $GREEN >> leak.log
+	echo -ne $CYAN
+	echo Testing $philo
+	echo -ne $WHITE
+
+	echo >> leak.log
 	echo $philo >> leak.log
-	echo -ne $WHITE >> leak.log
+	echo >> leak.log
+	echo "Testing leaks with the death of one philosopher.">> leak.log
+	echo >> leak.log
+
+	echo -ne $GREEN
+	echo "Testing leaks with the death of one philosopher."
+	echo -ne $WHITE
 	av_1=2
 	av_2=10
 	av_3=5
 	av_4=5
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>> leak.log
+
+	echo >> leak.log
+	echo "Testing leaks with every philosopher eating at least one time.">> leak.log
+	echo >> leak.log
+
+	echo -ne $GREEN
+	echo "Testing leaks with every philosopher eating at least one time."
+	echo -ne $WHITE
 	av_1=2
 	av_2=10000
 	av_3=5000
 	av_4=5
 	av_5=1
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>> leak.log
-done 
+done
 
-# bash valgrind.sh 1 2 10 5 5 2> leak.log
-# bash valgrind.sh 2 2 10 5 5 2>> leak.log
-# bash valgrind.sh 3 2 10 5 5 2>> leak.log
-
-# bash valgrind.sh 1 2 10000 5000 5 1 2>> leak.log
-# bash valgrind.sh 2 2 10000 5000 5 1 2>> leak.log
-# bash valgrind.sh 3 2 10000 5000 5 1 2>> leak.log
 echo
 echo -ne $CYAN
 echo "Valgrind tests finished to execute, check leak.log :
@@ -309,5 +310,3 @@ as indicated in pthread_create's manual, RTFM
 
 - Syscall errors caused by sem_open are a normal behavior"
 echo -ne $WHITE
-
-#  ps aux | grep -ie $philo | awk '{print $2}' | xargs kill -9
