@@ -68,14 +68,32 @@ for leak in ${PHILOSOPHES[*]}
 do 
 	philo=$leak
 
-	echo -ne $GREEN >> leak.log
+	echo -ne $CYAN
+	echo Testing $philo
+	echo -ne $WHITE
+
+	echo >> leak.log
 	echo $philo >> leak.log
-	echo -ne $WHITE >> leak.log
+	echo >> leak.log
+	echo "Testing leaks with the death of one philosopher.">> leak.log
+	echo >> leak.log
+
+	echo -ne $GREEN
+	echo "Testing leaks with the death of one philosopher."
+	echo -ne $WHITE
 	av_1=2
 	av_2=10
 	av_3=5
 	av_4=5
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>> leak.log
+
+	echo >> leak.log
+	echo "Testing leaks with every philosopher eating at least one time.">> leak.log
+	echo >> leak.log
+
+	echo -ne $GREEN
+	echo "Testing leaks with every philosopher eating at least one time."
+	echo -ne $WHITE
 	av_1=2
 	av_2=10000
 	av_3=5000
