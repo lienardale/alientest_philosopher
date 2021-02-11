@@ -1,17 +1,5 @@
 #!/bin/bash
 
-echo -e $YELLOW
-echo "If you are still developing and this tester causes you to have multiple processes still alive, use this to kill them :
- ' ps aux | grep -ie YOUR_PHILO_NAME | awk '{print $2}' | xargs kill -9 ' "
-echo -e $WHITE
-
-echo -e $YELLOW
-echo "If you want to test all philo -> 'bash test.sh'
-To test only philo_one : 'bash test.sh 1'
-To test only philo_two : 'bash test.sh 2'
-To test only philo_three : 'bash test.sh 3'"
-echo -e $WHITE
-
 if [ "$(uname -s)" != "Linux" ]
 then
 	cut_0=5
@@ -38,6 +26,18 @@ else
 	CYAN="\e[96m"
 	WHITE="\e[97m"
 fi
+
+echo -e $YELLOW
+echo "If you are still developing and this tester causes you to have multiple processes still alive, use this to kill them :
+ ' ps aux | grep -ie YOUR_PHILO_NAME | awk '{print $2}' | xargs kill -9 ' "
+echo -e $WHITE
+
+echo -e $YELLOW
+echo "If you want to test all philo -> 'bash test.sh'
+To test only philo_one : 'bash test.sh 1'
+To test only philo_two : 'bash test.sh 2'
+To test only philo_three : 'bash test.sh 3'"
+echo -e $WHITE
 
 echo "Testing Norm"
 norm=$(~/.norminette/norminette.rb ../ | grep Error)
@@ -261,7 +261,7 @@ done
 
 echo
 echo -ne $CYAN
-echo "To test leaks, check leak.log, if no valgrind, re-run script on VM and consider only these tests' results."
+echo "To test leaks, check leak.log, if no valgrind, run 'bash leak_test.sh' on VM and consider only these tests' results."
 echo -ne $WHITE
 echo
 
