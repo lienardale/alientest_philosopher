@@ -1,31 +1,12 @@
 #!/bin/bash
 
-if [ "$(uname -s)" != "Linux" ]
-then
-	cut_0=5
-	cut_1=6
-	cut_2=7
-	cut_3=8
-	RED="\033[91m"
-	GREEN="\033[92m"
-	YELLOW="\033[93m"
-	BLUE="\033[94m"
-	PURPLE="\033[95m"
-	CYAN="\033[96m"
-	WHITE="\033[97m"
-else
-	cut_0=4
-	cut_1=5
-	cut_2=6
-	cut_3=7
-	RED="\e[91m"
-	GREEN="\e[92m"
-	YELLOW="\e[93m"
-	BLUE="\e[94m"
-	PURPLE="\e[95m"
-	CYAN="\e[96m"
-	WHITE="\e[97m"
-fi
+RED="\033[91m"
+GREEN="\033[92m"
+YELLOW="\033[93m"
+BLUE="\033[94m"
+PURPLE="\033[95m"
+CYAN="\033[96m"
+WHITE="\033[97m"
 
 echo -e $YELLOW
 echo "If you are still developing and this tester causes you to have multiple processes still alive, use this to kill them :
@@ -80,27 +61,36 @@ do
 	echo -ne $GREEN
 	echo ARGS 5 800 200 200 X
 	echo -ne $WHITE
-	# 5 800 200 200
+	# 5 800 200 200 -> first test values of correction, philosophers are not supposed to die
 
 	av_1=5
 	av_2=800
 	av_3=200
 	av_4=200
 	av_5=1
-
+	# we use an av_5 so we can count the 'eating' nb, since it is a standardised output mentionned in the subject
+	# av_5 will go from 1 to 10
 	while [ $av_5 -le 10 ]
 	do
 		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
+		# nb is av_1 * av_5 : the minimum number of times the 'eating' output is supposed to be printed
 		nb=$(( av_1*av_5 ))
-		test=$(cat test.log | grep eating | wc | cut -b $cut_2,$cut_3)
+		# we use wc -l to count the number of 'eating' that were actualy present in the output
+		# note that it is not tested whether these 'eating' correspond to each philosopher, as it is asked for in the subject.
+		# you need to check that manually, try with low number of philosopher, or redirect the output in a log file so you can check thoroughly
+		test=$(cat test.log | grep eating | wc -l)
+		# we check if test < nb 
 		if [ "$test" -lt "$nb" ];
 		then
+			# if it is, then all philo cannot have eaten at least av_5 times
 			echo -n "Test $av_5 :"
 			echo -ne "\033[0;31m x	\033[0m"
 		else
+			# otherwise, we consider the test passed
 			echo -n "Test $av_5 :"
 			echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
 		fi
+		# we increment av_5 value
 		av_5=$(( $av_5 + 1 ))
 	done
 
@@ -108,7 +98,7 @@ do
 	echo -ne $GREEN
 	echo ARGS 4 410 200 200 X
 	echo -ne $WHITE
-	# 4 410 200 200
+	# 4 410 200 200 -> second test values of correction, philosophers are not supposed to die
 
 	av_1=4
 	av_2=410
@@ -120,7 +110,7 @@ do
 	do
 		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
 		nb=$(( av_1*av_5 ))
-		test=$(cat test.log | grep eating | wc | cut -b $cut_2,$cut_3)
+		test=$(cat test.log | grep eating | wc -l)
 		if [ "$test" -lt "$nb" ];
 		then
 			echo -n "Test $av_5 :"
@@ -136,7 +126,7 @@ do
 	echo -ne $GREEN
 	echo ARGS 4 310 200 100 X
 	echo -ne $WHITE
-	# 4 310 200 100
+	# 4 310 200 100 -> third test values of correction, one philo is supposed to die
 
 	av_1=4
 	av_2=310
@@ -144,18 +134,26 @@ do
 	av_4=100
 	av_5=2
 
+	# here, we search for 'died' in the output, since it is a standardised output mentionned in the subject
 	while [ $av_5 -le 11 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
-		nb=$(( av_1*av_5 ))
-		test=$(cat test.log | grep died)
-		if [ -z "$test" ];
+		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
+		# in this test, nb=1, since one, and only one philo is supposed to die
+		nb=1
+		test=$(cat test.log | grep died | wc -l)
+		# we check if test == nb 
+		if [ "$test" -eq "$nb" ];
 		then
+			# if it is, we consider the test passed
+			echo -n "Test $av_5 :"
+			echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+		else
+			# if it is not, it can mean that :
+				#	- there is a typo in the death output, it is mentionned in the subject that 'died' is supposed to appear in it
+				# 	- no philosopher died (and something is wrong, you can grade 0 for this)
+				# 	- more than one philosopher died (and it is a mistake, you can grade 0 for this)
 			echo -n "Test $av_5 :"
 			echo -ne "\033[0;31m x	\033[0m"
-		else
-			echo -n "Test $(( $av_5 - 1 )) :"
-			echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
 		fi
 		av_5=$(( $av_5 + 1 ))
 	done
@@ -170,12 +168,12 @@ do
 	av_3=100
 	av_4=100
 	av_5=1
-
+# with these values, philosophers are not supposed to die
 	while [ $av_5 -le 10 ]
 	do
 		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
 		nb=$(( av_1*av_5 ))
-		test=$(cat test.log | grep eating | wc | cut -b $cut_1,$cut_2,$cut_3)
+		test=$(cat test.log | grep eating | wc -l)
 		if [ "$test" -lt "$nb" ];
 		then
 			echo -n "Test $av_5 :"
@@ -187,7 +185,7 @@ do
 		av_5=$(( $av_5 + 1 ))
 	done
 	echo
-
+# the purpose of this test is to check if there is no deadlock/segfault, you can choose a different output than 'died'
 	echo -ne $GREEN
 	echo ONLY ONE PHILOSOPHE
 	echo -ne $WHITE
@@ -199,9 +197,10 @@ do
 	else
 		echo -n "Test with only one philosophe - $philo :"
 		echo -ne "\033[0;31m x	\033[0m"
+		echo "the purpose of this test is to check if there is no deadlock/segfault with only one philosopher, if there is a red cross and that the script continues to run, it usualy means it's ok"
 	fi
 	echo
-
+# the purpose of this test is to check if there is no deadlock/segfault, you can choose a different output than 'died'
 	echo -ne $GREEN
 	echo ONLY ONE PHILOSOPHE + av_5
 	echo -ne $WHITE
@@ -213,6 +212,7 @@ do
 	else
 		echo -n "Test with only one philosophe + av5 - $philo :"
 		echo -ne "\033[0;31m x	\033[0m"
+		echo "the purpose of this test is to check if there is no deadlock/segfault with only one philosopher, if there is a red cross and that the script continues to run, it usualy means it's ok"
 	fi
 	echo
 
@@ -236,7 +236,7 @@ do
 	echo -ne $GREEN
 	echo 200 PHILOSOPHES + av_5
 	echo -ne $WHITE
-	test=$(./../$philo/$philo 200 13000 100 100 10 | grep eating | wc | cut -b $cut_0,$cut_1,$cut_2,$cut_3)
+	test=$(./../$philo/$philo 200 13000 100 100 10 | grep eating | wc -l)
 	if [ "$test" -ge 2000 ];
 	then
 		echo -n "Test 200 philosophes + av5 - $philo :"
@@ -293,6 +293,40 @@ do
 	av_4=5
 	av_5=1
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>> leak.log
+
+	echo >> leak.log
+	echo $philo >> leak.log
+	echo >> leak.log
+	echo "Testing leaks with only one philosopher.">> leak.log
+	echo >> leak.log
+
+	echo -ne $GREEN
+	echo "Testing leaks with only one philosopher."
+	echo -ne $WHITE
+	av_1=1
+	av_2=10
+	av_3=5
+	av_4=5
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>> leak.log
+
+	echo >> leak.log
+	echo $philo >> leak.log
+	echo >> leak.log
+	echo "Testing leaks with only one philosopher + av_5.">> leak.log
+	echo >> leak.log
+
+	echo -ne $GREEN
+	echo "Testing leaks with only one philosopher + av_5."
+	echo -ne $WHITE
+	av_1=1
+	av_2=10
+	av_3=5
+	av_4=5
+	av_5=2
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>> leak.log
+
+	# test =$(cat test.log | grep eating | wc -l)
+
 done
 
 echo
