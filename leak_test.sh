@@ -1,31 +1,12 @@
 #!/bin/bash
 
-if [ "$(uname -s)" != "Linux" ]
-then
-	cut_0=5
-	cut_1=6
-	cut_2=7
-	cut_3=8
-	RED="\033[91m"
-	GREEN="\033[92m"
-	YELLOW="\033[93m"
-	BLUE="\033[94m"
-	PURPLE="\033[95m"
-	CYAN="\033[96m"
-	WHITE="\033[97m"
-else
-	cut_0=4
-	cut_1=5
-	cut_2=6
-	cut_3=7
-	RED="\e[91m"
-	GREEN="\e[92m"
-	YELLOW="\e[93m"
-	BLUE="\e[94m"
-	PURPLE="\e[95m"
-	CYAN="\e[96m"
-	WHITE="\e[97m"
-fi
+RED="\033[91m"
+GREEN="\033[92m"
+YELLOW="\033[93m"
+BLUE="\033[94m"
+PURPLE="\033[95m"
+CYAN="\033[96m"
+WHITE="\033[97m"
 
 echo -e $YELLOW
 echo "If you are still developing and this tester causes you to have multiple processes still alive, use this to kill them :
@@ -63,6 +44,7 @@ else
 fi
 
 rm leak.log
+rm tmp_leak.log
 
 for leak in ${PHILOSOPHES[*]}
 do 
@@ -85,7 +67,21 @@ do
 	av_2=10
 	av_3=5
 	av_4=5
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>> leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
+	cat tmp_leak.log >> leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+	else
+		echo -ne $GREEN
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
 
 	echo >> leak.log
 	echo "Testing leaks with every philosopher eating at least one time.">> leak.log
@@ -99,8 +95,81 @@ do
 	av_3=5000
 	av_4=5
 	av_5=1
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>> leak.log
-done 
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
+	cat tmp_leak.log >> leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+	else
+		echo -ne $GREEN
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
+
+	echo >> leak.log
+	echo $philo >> leak.log
+	echo >> leak.log
+	echo "Testing leaks with only one philosopher.">> leak.log
+	echo >> leak.log
+
+	echo -ne $GREEN
+	echo "Testing leaks with only one philosopher."
+	echo -ne $WHITE
+	av_1=1
+	av_2=10
+	av_3=5
+	av_4=5
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
+	cat tmp_leak.log >> leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+	else
+		echo -ne $GREEN
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
+
+	echo >> leak.log
+	echo $philo >> leak.log
+	echo >> leak.log
+	echo "Testing leaks with only one philosopher + av_5.">> leak.log
+	echo >> leak.log
+
+	echo -ne $GREEN
+	echo "Testing leaks with only one philosopher + av_5."
+	echo -ne $WHITE
+	av_1=1
+	av_2=10
+	av_3=5
+	av_4=5
+	av_5=2
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
+	cat tmp_leak.log >> leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+	else
+		echo -ne $GREEN
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
+done
 
 echo
 echo -ne $CYAN

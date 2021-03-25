@@ -256,6 +256,7 @@ echo -ne $WHITE
 echo
 
 rm leak.log
+rm tmp_leak.log
 
 for leak in ${PHILOSOPHES[*]}
 do 
@@ -278,7 +279,21 @@ do
 	av_2=10
 	av_3=5
 	av_4=5
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>> leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
+	cat tmp_leak.log >> leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	---->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+	else
+		echo -ne $GREEN
+		echo -n "	---->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
 
 	echo >> leak.log
 	echo "Testing leaks with every philosopher eating at least one time.">> leak.log
@@ -292,7 +307,21 @@ do
 	av_3=5000
 	av_4=5
 	av_5=1
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>> leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
+	cat tmp_leak.log >> leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	---->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+	else
+		echo -ne $GREEN
+		echo -n "	---->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
 
 	echo >> leak.log
 	echo $philo >> leak.log
@@ -307,7 +336,21 @@ do
 	av_2=10
 	av_3=5
 	av_4=5
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>> leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
+	cat tmp_leak.log >> leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	---->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+	else
+		echo -ne $GREEN
+		echo -n "	---->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
 
 	echo >> leak.log
 	echo $philo >> leak.log
@@ -323,10 +366,21 @@ do
 	av_3=5
 	av_4=5
 	av_5=2
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>> leak.log
-
-	# test =$(cat test.log | grep eating | wc -l)
-
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
+	cat tmp_leak.log >> leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	---->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+	else
+		echo -ne $GREEN
+		echo -n "	---->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
 done
 
 echo
