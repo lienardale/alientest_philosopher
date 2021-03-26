@@ -45,13 +45,39 @@ then
 	PHILOSOPHES=( philo_two )
 elif [ "$1" == 3 ];
 then
+    echo -e $RED
+    read  -n 1 -p "
+/!\ WARNING /!\\
+
+    You have selected tests for philo_three, there is going to be a lot of forks involved.
+    Be sure that you kill/exit most forks with manual tests + ''ps -ef | philo' before you go ahead.
+    Otherwise, it could make your machine crash.
+
+    If you are sure, press enter, if not, ctrl+C
+
+/!\ WARNING /!\\
+" input
+    echo -ne $WHITE
 	PHILOSOPHES=( philo_three )
 else
+    echo -e $RED
+    read  -n 1 -p "
+/!\ WARNING /!\\
+
+    You have selected tests for all philo, there is going to be a lot of forks involved for philo_three.
+    Be sure that you kill/exit most forks with manual tests + ''ps -ef | philo' before you go ahead.
+    Otherwise, it could make your machine crash.
+
+    If you are sure, press enter, if not, ctrl+C
+
+/!\ WARNING /!\\
+" input
+    echo -ne $WHITE
 	PHILOSOPHES=( philo_one philo_two philo_three )
 fi
 
 for philosophe in ${PHILOSOPHES[*]}
-do 
+do
 	echo
 	echo -ne $CYAN
 	echo $philosophe
@@ -72,14 +98,14 @@ do
 	# av_5 will go from 1 to 10
 	while [ $av_5 -le 10 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
+		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
 		# nb is av_1 * av_5 : the minimum number of times the 'eating' output is supposed to be printed
 		nb=$(( av_1*av_5 ))
 		# we use wc -l to count the number of 'eating' that were actualy present in the output
 		# note that it is not tested whether these 'eating' correspond to each philosopher, as it is asked for in the subject.
 		# you need to check that manually, try with low number of philosopher, or redirect the output in a log file so you can check thoroughly
 		test=$(cat test.log | grep eating | wc -l)
-		# we check if test < nb 
+		# we check if test < nb
 		if [ "$test" -lt "$nb" ];
 		then
 			# if it is, then all philo cannot have eaten at least av_5 times
@@ -108,7 +134,7 @@ do
 
 	while [ $av_5 -le 10 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
+		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc -l)
 		if [ "$test" -lt "$nb" ];
@@ -141,18 +167,18 @@ do
 		# in this test, nb=1, since one, and only one philo is supposed to die
 		nb=1
 		test=$(cat test.log | grep died | wc -l)
-		# we check if test == nb 
+		# we check if test == nb
 		if [ "$test" -eq "$nb" ];
 		then
 			# if it is, we consider the test passed
-			echo -n "Test $av_5 :"
+            echo -n "Test $(( $av_5 - 1)) :"
 			echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
 		else
 			# if it is not, it can mean that :
 				#	- there is a typo in the death output, it is mentionned in the subject that 'died' is supposed to appear in it
 				# 	- no philosopher died (and something is wrong, you can grade 0 for this)
 				# 	- more than one philosopher died (and it is a mistake, you can grade 0 for this)
-			echo -n "Test $av_5 :"
+                echo -n "Test $(( $av_5 - 1 )) :"
 			echo -ne "\033[0;31m x	\033[0m"
 		fi
 		av_5=$(( $av_5 + 1 ))
@@ -171,7 +197,7 @@ do
 # with these values, philosophers are not supposed to die
 	while [ $av_5 -le 10 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log 
+		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc -l)
 		if [ "$test" -lt "$nb" ];
@@ -259,7 +285,7 @@ rm leak.log
 rm tmp_leak.log
 
 for leak in ${PHILOSOPHES[*]}
-do 
+do
 	philo=$leak
 
 	echo -ne $CYAN
@@ -386,11 +412,11 @@ done
 echo
 echo -ne $CYAN
 echo "Valgrind tests finished to execute, check leak.log :
-- any HEAP SUMMARY that doesnt say 
+- any HEAP SUMMARY that doesnt say
 	'in use at exit: 0 bytes in 0 blocks'
 	and
 	'All heap blocks were freed -- no leaks are possible'
-	
+
 	means that the program is leaking memory in some way or another.
 
 - it IS possible to free the memory allocated by pthread_create with a proper use of pthread_join
