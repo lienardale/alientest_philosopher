@@ -76,6 +76,9 @@ do
 		echo -n "	----->	leaks :"
 		echo -ne $WHITE
 		echo -e "\033[0;31m x	\033[0m"
+		echo -ne $RED
+		echo "Check leak.log for detail, nothing should be lost in any way."
+		echo -ne $WHITE
 	else
 		echo -ne $GREEN
 		echo -n "	----->	leaks :"
@@ -104,6 +107,9 @@ do
 		echo -n "	----->	leaks :"
 		echo -ne $WHITE
 		echo -e "\033[0;31m x	\033[0m"
+		echo -ne $RED
+		echo "Check leak.log for detail, nothing should be lost in any way."
+		echo -ne $WHITE
 	else
 		echo -ne $GREEN
 		echo -n "	----->	leaks :"
@@ -133,6 +139,9 @@ do
 		echo -n "	----->	leaks :"
 		echo -ne $WHITE
 		echo -e "\033[0;31m x	\033[0m"
+		echo -ne $RED
+		echo "Check leak.log for detail, nothing should be lost in any way."
+		echo -ne $WHITE
 	else
 		echo -ne $GREEN
 		echo -n "	----->	leaks :"
@@ -163,6 +172,9 @@ do
 		echo -n "	----->	leaks :"
 		echo -ne $WHITE
 		echo -e "\033[0;31m x	\033[0m"
+		echo -ne $RED
+		echo "Check leak.log for detail, nothing should be lost in any way."
+		echo -ne $WHITE
 	else
 		echo -ne $GREEN
 		echo -n "	----->	leaks :"
@@ -184,5 +196,5 @@ echo "Valgrind tests finished to execute, check leak.log :
 - it IS possible to free the memory allocated by pthread_create with a proper use of pthread_join
 as indicated in pthread_create's manual, RTFM
 
-- Syscall errors caused by sem_open are a normal behavior"
+- Syscall errors caused by sem_open are a normal behavior."
 echo -ne $WHITE

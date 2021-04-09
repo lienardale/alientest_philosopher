@@ -22,7 +22,41 @@ make -C ../$philo
 
 if [ "$6" != "" ];
 then
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $2 $3 $4 $5 $6
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $2 $3 $4 $5 $6 2>tmp_leak.log
+	cat tmp_leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+		echo -ne $RED
+		echo "Check tmp_leak.log for detail, nothing should be lost in any way."
+		echo -ne $WHITE
+	else
+		echo -ne $GREEN
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
 else
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $2 $3 $4 $5
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $2 $3 $4 $5 2>tmp_leak.log
+	cat tmp_leak.log
+	test=$(cat tmp_leak.log | grep lost)
+	if [ ! -z "$test" ];
+	then
+		echo -ne $RED
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;31m x	\033[0m"
+		echo -ne $RED
+		echo "Check tmp_leak.log for detail, nothing should be lost in any way."
+		echo -ne $WHITE
+	else
+		echo -ne $GREEN
+		echo -n "	----->	leaks :"
+		echo -ne $WHITE
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
+	fi
 fi

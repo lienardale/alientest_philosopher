@@ -11,31 +11,14 @@ WHITE="\033[97m"
 echo -e $YELLOW
 echo "If you are still developing and this tester causes you to have multiple processes still alive, use this to kill them :
  ' ps aux | grep -ie YOUR_PHILO_NAME | awk '{print $2}' | xargs kill -9 ' "
-echo -e $WHITE
+echo -ne $WHITE
 
 echo -e $YELLOW
-echo "If you want to test all philo -> 'bash test.sh'
+echo -n "If you want to test all philo -> 'bash test.sh'
 To test only philo_one : 'bash test.sh 1'
 To test only philo_two : 'bash test.sh 2'
 To test only philo_three : 'bash test.sh 3'"
-echo -e $WHITE
-
-echo "Testing Norm"
-norm=$(~/.norminette/norminette.rb ../ | grep Error)
-if [ -z "$norm" ];
-then
-	echo -n "Norm :"
-	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
-else
-	echo -n "Norm :"
-	echo -ne "\033[0;31m x	\033[0m"
-	echo $norm
-fi
-echo
-
-make -C ../philo_one
-make -C ../philo_two
-make -C ../philo_three
+echo -ne $WHITE
 
 if [ "$1" == "1" ];
 then
@@ -75,6 +58,24 @@ else
     echo -ne $WHITE
 	PHILOSOPHES=( philo_one philo_two philo_three )
 fi
+
+echo "Testing Norm"
+norm=$(~/.norminette/norminette.rb ../ | grep Error)
+if [ -z "$norm" ];
+then
+	echo -n "Norm :"
+	echo -ne "\033[0;32m \xE2\x9C\x94	\033[0m"
+else
+	echo -n "Norm :"
+	echo -ne "\033[0;31m x	\033[0m"
+	echo $norm
+fi
+echo
+
+make -C ../philo_one
+make -C ../philo_two
+make -C ../philo_three
+
 
 for philosophe in ${PHILOSOPHES[*]}
 do
