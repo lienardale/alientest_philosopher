@@ -8,6 +8,33 @@ PURPLE="\033[95m"
 CYAN="\033[96m"
 WHITE="\033[97m"
 
+if [ "$(uname -s)" != "Linux" ]
+then
+	echo -ne $RED
+	echo "/!\ WARNING /!\\
+
+You're on Mac OS, valgrind cannot be properly implemented here.
+Go on the VM and rerun this script.
+You MUST do it, in order to thoroughly test the leaks.
+A philosopher that leaks is a philosopher that deserves a zero.
+
+/!\ WARNING /!\\"
+	echo -ne $WHITE
+	exit
+elif ! command -v valgrind &> /dev/null
+then
+    echo -n "Installing valgrind..."
+	sudo apt install valgrind &> install.log
+	echo "complete."
+fi
+
+echo
+echo -ne $CYAN
+echo "Running leak tests, check leak.log once they are finished
+Do not hesitate to test the leaks with other values using the 'valgrind.sh' script."
+echo -ne $WHITE
+echo
+
 echo -e $YELLOW
 echo "If you are still developing and this tester causes you to have multiple processes still alive, use this to kill them :
  ' ps aux | grep -ie YOUR_PHILO_NAME | awk '{print $2}' | xargs kill -9 ' "

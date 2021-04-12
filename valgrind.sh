@@ -1,3 +1,30 @@
+RED="\033[91m"
+GREEN="\033[92m"
+YELLOW="\033[93m"
+BLUE="\033[94m"
+PURPLE="\033[95m"
+CYAN="\033[96m"
+WHITE="\033[97m"
+
+if [ "$(uname -s)" != "Linux" ]
+then
+	echo -ne $RED
+	echo "/!\ WARNING /!\\
+
+You're on Mac OS, valgrind cannot be properly implemented here.
+Go on the VM and rerun this script.
+You MUST do it, in order to thoroughly test the leaks.
+A philosopher that leaks is a philosopher that deserves a zero.
+
+/!\ WARNING /!\\"
+	echo -ne $WHITE
+	exit
+elif ! command -v valgrind &> /dev/null
+then
+    echo -n "Installing valgrind..."
+	sudo apt install valgrind &> install.log
+	echo "complete."
+fi
 
 read  -n 1 -p "
 Usage : bash valgrind.sh philo_one_or_two_or_three (1 for philo_one, 2 for philo_two, 3 for philo_three) Nb_philo T_to_die T_to_eat T_to_sleep

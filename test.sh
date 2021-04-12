@@ -276,9 +276,30 @@ do
 
 done
 
+if [ "$(uname -s)" != "Linux" ]
+then
+	echo -ne $RED
+	echo "/!\ WARNING /!\\
+
+You're on Mac OS, valgrind cannot be properly implemented here.
+Go on the VM and run 'bash leak_test.sh'.
+You MUST do it, in order to thoroughly test the leaks.
+A philosopher that leaks is a philosopher that deserves a zero.
+
+/!\ WARNING /!\\"
+	echo -ne $WHITE
+	exit
+elif ! command -v valgrind &> /dev/null
+then
+    echo -n "Installing valgrind..."
+	sudo apt install valgrind &> install.log
+	echo "complete."
+fi
+
 echo
 echo -ne $CYAN
-echo "To test leaks, check leak.log, if no valgrind, run 'bash leak_test.sh' on VM and consider only these tests' results."
+echo "Running leak tests, check leak.log once they are finished
+Do not hesitate to test the leaks with other values using the 'valgrind.sh' script."
 echo -ne $WHITE
 echo
 
@@ -425,3 +446,4 @@ as indicated in pthread_create's manual, RTFM
 
 - Syscall errors caused by sem_open are a normal behavior"
 echo -ne $WHITE
+
