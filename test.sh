@@ -15,33 +15,14 @@ echo -ne $WHITE
 
 echo -e $YELLOW
 echo -n "If you want to test all philo -> 'bash test.sh'
-To test only philo_one : 'bash test.sh 1'
-To test only philo_two : 'bash test.sh 2'
-To test only philo_three : 'bash test.sh 3'"
+To test only one philo : -> bash test.sh YOUR_DIRECTORY
+Exemple : bash test.sh philo_bonus"
 echo -ne $WHITE
 
-if [ "$1" == "1" ];
+var="$1"
+if [ -n "$var" ]
 then
-	PHILOSOPHES=( philo_one )
-elif [ "$1" == 2 ];
-then
-	PHILOSOPHES=( philo_two )
-elif [ "$1" == 3 ];
-then
-    echo -e $RED
-    read  -n 1 -p "
-/!\ WARNING /!\\
-
-    You have selected tests for philo_three, there is going to be a lot of forks involved.
-    Be sure that you kill/exit most forks with manual tests + ''ps -ef | philo' before you go ahead.
-    Otherwise, it could make your machine crash.
-
-    If you are sure, press enter, if not, ctrl+C
-
-/!\ WARNING /!\\
-" input
-    echo -ne $WHITE
-	PHILOSOPHES=( philo_three )
+	PHILOSOPHES=$1
 else
     echo -e $RED
     read  -n 1 -p "
@@ -56,7 +37,7 @@ else
 /!\ WARNING /!\\
 " input
     echo -ne $WHITE
-	PHILOSOPHES=( philo_one philo_two philo_three )
+	PHILOSOPHES=$(ls ../ | grep -v "README" | grep -v alientest_philosopher)
 fi
 
 echo "Testing Norm"
@@ -72,10 +53,12 @@ else
 fi
 echo
 
-make -C ../philo_one
-make -C ../philo_two
-make -C ../philo_three
+bash clean.sh
 
+for compil in ${PHILOSOPHES[*]}
+do
+	make -C ../$compil
+done
 
 for philosophe in ${PHILOSOPHES[*]}
 do

@@ -1,4 +1,7 @@
 #!/bin/bash
-make -C ../philo_one fclean
-make -C ../philo_two fclean
-make -C ../philo_three fclean
+
+PHILOSOPHES=$(ls ../ | grep -v "README" | grep -v alientest_philosopher)
+for compil in ${PHILOSOPHES[*]}
+do
+	make -C ../$compil fclean
+done
