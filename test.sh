@@ -14,21 +14,18 @@ echo "If you are still developing and this tester causes you to have multiple pr
 echo -ne $WHITE
 
 echo -e $YELLOW
-echo -n "If you want to test all philo -> 'bash test.sh'
-To test only one philo : -> bash test.sh YOUR_DIRECTORY
-Exemple : bash test.sh philo_bonus"
-echo -ne $WHITE
+echo -n "If you want to test only one philo (without bonus) -> 'bash test.sh'
+To test also philo_bonus : -> bash test.sh bonus"
+echo -e $WHITE
 
 var="$1"
 if [ -n "$var" ]
 then
-	PHILOSOPHES=$1
-else
-    echo -e $RED
+	echo -e $RED
     read  -n 1 -p "
 /!\ WARNING /!\\
 
-    You have selected tests for all philo, there is going to be a lot of forks involved for philo_three.
+    You have selected tests for all philo, there is going to be a lot of forks involved for philo_bonus.
     Be sure that you kill/exit most forks with manual tests + ''ps -ef | philo' before you go ahead.
     Otherwise, it could make your machine crash.
 
@@ -38,10 +35,22 @@ else
 " input
     echo -ne $WHITE
 	PHILOSOPHES=$(ls ../ | grep -v "README" | grep -v alientest_philosopher)
+	bonus=1
+	for compil in ${PHILOSOPHES[*]}
+	do
+		make -C ../$compil
+	done
+	bash clean_bonus.sh
+else
+    # echo -ne $WHITE
+	PHILOSOPHES=$(cat ../Makefile| grep "NAME =" | cut -d " " -f3)
+	make -C ../ fclean
+	make -C ../
+	bonus=0
 fi
 
 echo "Testing Norm"
-norm=$(~/.norminette/norminette.rb ../ | grep Error)
+norm=$(norminette ../ | grep Error)
 if [ -z "$norm" ];
 then
 	echo -n "Norm :"
@@ -53,15 +62,11 @@ else
 fi
 echo
 
-bash clean.sh
-
-for compil in ${PHILOSOPHES[*]}
-do
-	make -C ../$compil
-done
-
 for philosophe in ${PHILOSOPHES[*]}
 do
+	if [ $bonus == 1 ]; then
+		$philosophe=$philosophe/$philosophe
+	fi
 	echo
 	echo -ne $CYAN
 	echo $philosophe
@@ -82,7 +87,7 @@ do
 	# av_5 will go from 1 to 10
 	while [ $av_5 -le 10 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
+		./../$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
 		# nb is av_1 * av_5 : the minimum number of times the 'eating' output is supposed to be printed
 		nb=$(( av_1*av_5 ))
 		# we use wc -l to count the number of 'eating' that were actualy present in the output
@@ -118,7 +123,7 @@ do
 
 	while [ $av_5 -le 10 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
+		./../$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc -l)
 		if [ "$test" -lt "$nb" ];
@@ -147,7 +152,7 @@ do
 	# here, we search for 'died' in the output, since it is a standardised output mentionned in the subject
 	while [ $av_5 -le 11 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
+		./../$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
 		# in this test, nb=1, since one, and only one philo is supposed to die
 		nb=1
 		test=$(cat test.log | grep died | wc -l)
@@ -181,7 +186,7 @@ do
 # with these values, philosophers are not supposed to die
 	while [ $av_5 -le 10 ]
 	do
-		./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
+		./../$philo $av_1 $av_2 $av_3 $av_4 $av_5 > test.log
 		nb=$(( av_1*av_5 ))
 		test=$(cat test.log | grep eating | wc -l)
 		if [ "$test" -lt "$nb" ];
@@ -199,7 +204,7 @@ do
 	echo -ne $GREEN
 	echo ONLY ONE PHILOSOPHE
 	echo -ne $WHITE
-	test=$(./../$philo/$philo 1 10 5 5 | grep died)
+	test=$(./../$philo 1 10 5 5 | grep died)
 	if [ ! -z "$test" ];
 	then
 		echo -n "Test with only one philosophe - $philo :"
@@ -214,7 +219,7 @@ do
 	echo -ne $GREEN
 	echo ONLY ONE PHILOSOPHE + av_5
 	echo -ne $WHITE
-	test=$(./../$philo/$philo 1 10 5 5 1 | grep died)
+	test=$(./../$philo 1 10 5 5 1 | grep died)
 	if [ ! -z "$test" ];
 	then
 		echo -n "Test with only one philosophe + av5 - $philo :"
@@ -229,7 +234,7 @@ do
 	echo -ne $GREEN
 	echo 200 PHILOSOPHES
 	echo -ne $WHITE
-	test=$(./../$philo/$philo 200 200 100 100 | grep died)
+	test=$(./../$philo 200 200 100 100 | grep died)
 	if [ ! -z "$test" ];
 	then
 		echo -n "Test 200 philosophes - $philo :"
@@ -246,7 +251,7 @@ do
 	echo -ne $GREEN
 	echo 200 PHILOSOPHES + av_5
 	echo -ne $WHITE
-	test=$(./../$philo/$philo 200 13000 100 100 10 | grep eating | wc -l)
+	test=$(./../$philo 200 13000 100 100 10 | grep eating | wc -l)
 	if [ "$test" -ge 2000 ];
 	then
 		echo -n "Test 200 philosophes + av5 - $philo :"
@@ -310,7 +315,7 @@ do
 	av_2=10
 	av_3=5
 	av_4=5
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
 	cat tmp_leak.log >> leak.log
 	test=$(cat tmp_leak.log | grep lost)
 	if [ ! -z "$test" ];
@@ -338,7 +343,7 @@ do
 	av_3=5000
 	av_4=5
 	av_5=1
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
 	cat tmp_leak.log >> leak.log
 	test=$(cat tmp_leak.log | grep lost)
 	if [ ! -z "$test" ];
@@ -367,7 +372,7 @@ do
 	av_2=10
 	av_3=5
 	av_4=5
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
 	cat tmp_leak.log >> leak.log
 	test=$(cat tmp_leak.log | grep lost)
 	if [ ! -z "$test" ];
@@ -397,7 +402,7 @@ do
 	av_3=5
 	av_4=5
 	av_5=2
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
 	cat tmp_leak.log >> leak.log
 	test=$(cat tmp_leak.log | grep lost)
 	if [ ! -z "$test" ];
