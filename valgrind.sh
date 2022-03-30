@@ -44,7 +44,7 @@ make -C ../$philo
 
 if [ "$6" != "" ];
 then
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $2 $3 $4 $5 $6 2>tmp_leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --check-stack-var=yes ./../$philo/$philo $2 $3 $4 $5 $6 2>tmp_leak.log
 	cat tmp_leak.log
 	test=$(cat tmp_leak.log | grep lost)
 	if [ ! -z "$test" ];
@@ -63,7 +63,7 @@ then
 		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
 	fi
 else
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo/$philo $2 $3 $4 $5 2>tmp_leak.log
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --check-stack-var=yes ./../$philo/$philo $2 $3 $4 $5 2>tmp_leak.log
 	cat tmp_leak.log
 	test=$(cat tmp_leak.log | grep lost)
 	if [ ! -z "$test" ];
