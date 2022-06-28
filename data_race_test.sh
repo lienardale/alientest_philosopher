@@ -70,8 +70,15 @@ done
 a_dir=($PHILO_DIRS)
 a_philo=($PHILOSOPHES)
 
-rm leak.log
-rm tmp_leak.log
+echo
+echo -ne $CYAN
+echo "Running data_race tests, check data_race.log once they are finished
+Do not hesitate to test the data_races with other values using the 'valgrind.sh' script."
+echo -ne $WHITE
+echo
+
+rm data_race.log
+rm tmp_data_race.log
 
 NB=0
 while (( NB < ${#a_philo[@]} ))
@@ -83,118 +90,118 @@ do
 	echo Testing $philo
 	echo -ne $WHITE
 
-	echo >> leak.log
-	echo $philo >> leak.log
-	echo >> leak.log
-	echo "Testing leaks with the death of one philosopher.">> leak.log
-	echo >> leak.log
+	echo >> data_race.log
+	echo $philo >> data_race.log
+	echo >> data_race.log
+	echo "Testing data_races with the death of one philosopher.">> data_race.log
+	echo >> data_race.log
 
 	echo -ne $GREEN
-	echo "Testing leaks with the death of one philosopher."
+	echo "Testing data_races with the death of one philosopher."
 	echo -ne $WHITE
 	av_1=2
 	av_2=10
 	av_3=5
 	av_4=5
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo_dir$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
-	cat tmp_leak.log >> leak.log
-	test=$(cat tmp_leak.log | grep lost)
+	valgrind --tool=helgrind ./../$philo_dir$philo $av_1 $av_2 $av_3 $av_4 2>tmp_data_race.log
+	cat tmp_data_race.log >> data_race.log
+	test=$(cat tmp_data_race.log | grep "data race")
 	if [ ! -z "$test" ];
 	then
 		echo -ne $RED
-		echo -n "	---->	leaks :"
+		echo -n "	---->	data_races :"
 		echo -ne $WHITE
 		echo -e "\033[0;31m x	\033[0m"
 	else
 		echo -ne $GREEN
-		echo -n "	---->	leaks :"
+		echo -n "	---->	data_races :"
 		echo -ne $WHITE
 		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
 	fi
 
-	echo >> leak.log
-	echo "Testing leaks with every philosopher eating at least one time.">> leak.log
-	echo >> leak.log
+	echo >> data_race.log
+	echo "Testing data_races with every philosopher eating at least one time.">> data_race.log
+	echo >> data_race.log
 
 	echo -ne $GREEN
-	echo "Testing leaks with every philosopher eating at least one time."
+	echo "Testing data_races with every philosopher eating at least one time."
 	echo -ne $WHITE
 	av_1=2
 	av_2=10000
 	av_3=5000
 	av_4=5
 	av_5=1
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo_dir$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
-	cat tmp_leak.log >> leak.log
-	test=$(cat tmp_leak.log | grep lost)
+	valgrind --tool=helgrind ./../$philo_dir$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_data_race.log
+	cat tmp_data_race.log >> data_race.log
+	test=$(cat tmp_data_race.log | grep "data race")
 	if [ ! -z "$test" ];
 	then
 		echo -ne $RED
-		echo -n "	---->	leaks :"
+		echo -n "	---->	data_races :"
 		echo -ne $WHITE
 		echo -e "\033[0;31m x	\033[0m"
 	else
 		echo -ne $GREEN
-		echo -n "	---->	leaks :"
+		echo -n "	---->	data_races :"
 		echo -ne $WHITE
 		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
 	fi
 
-	echo >> leak.log
-	echo $philo >> leak.log
-	echo >> leak.log
-	echo "Testing leaks with only one philosopher.">> leak.log
-	echo >> leak.log
+	echo >> data_race.log
+	echo $philo >> data_race.log
+	echo >> data_race.log
+	echo "Testing data_races with only one philosopher.">> data_race.log
+	echo >> data_race.log
 
 	echo -ne $GREEN
-	echo "Testing leaks with only one philosopher."
+	echo "Testing data_races with only one philosopher."
 	echo -ne $WHITE
 	av_1=1
 	av_2=10
 	av_3=5
 	av_4=5
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo_dir$philo $av_1 $av_2 $av_3 $av_4 2>tmp_leak.log
-	cat tmp_leak.log >> leak.log
-	test=$(cat tmp_leak.log | grep lost)
+	valgrind --tool=helgrind ./../$philo_dir$philo $av_1 $av_2 $av_3 $av_4 2>tmp_data_race.log
+	cat tmp_data_race.log >> data_race.log
+	test=$(cat tmp_data_race.log | grep "data race")
 	if [ ! -z "$test" ];
 	then
 		echo -ne $RED
-		echo -n "	---->	leaks :"
+		echo -n "	---->	data_races :"
 		echo -ne $WHITE
 		echo -e "\033[0;31m x	\033[0m"
 	else
 		echo -ne $GREEN
-		echo -n "	---->	leaks :"
+		echo -n "	---->	data_races :"
 		echo -ne $WHITE
 		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
 	fi
 
-	echo >> leak.log
-	echo $philo >> leak.log
-	echo >> leak.log
-	echo "Testing leaks with only one philosopher + av_5.">> leak.log
-	echo >> leak.log
+	echo >> data_race.log
+	echo $philo >> data_race.log
+	echo >> data_race.log
+	echo "Testing data_races with only one philosopher + av_5.">> data_race.log
+	echo >> data_race.log
 
 	echo -ne $GREEN
-	echo "Testing leaks with only one philosopher + av_5."
+	echo "Testing data_races with only one philosopher + av_5."
 	echo -ne $WHITE
 	av_1=1
 	av_2=10
 	av_3=5
 	av_4=5
 	av_5=2
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./../$philo_dir$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_leak.log
-	cat tmp_leak.log >> leak.log
-	test=$(cat tmp_leak.log | grep lost)
+	valgrind --tool=helgrind ./../$philo_dir$philo $av_1 $av_2 $av_3 $av_4 $av_5 2>tmp_data_race.log
+	cat tmp_data_race.log >> data_race.log
+	test=$(cat tmp_data_race.log | grep "data race")
 	if [ ! -z "$test" ];
 	then
 		echo -ne $RED
-		echo -n "	---->	leaks :"
+		echo -n "	---->	data_races :"
 		echo -ne $WHITE
 		echo -e "\033[0;31m x	\033[0m"
 	else
 		echo -ne $GREEN
-		echo -n "	---->	leaks :"
+		echo -n "	---->	data_races :"
 		echo -ne $WHITE
 		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
 	fi
@@ -203,16 +210,5 @@ done
 
 echo
 echo -ne $CYAN
-echo "Valgrind tests finished to execute, check leak.log :
-- any HEAP SUMMARY that doesnt say
-	'in use at exit: 0 bytes in 0 blocks'
-	and
-	'All heap blocks were freed -- no leaks are possible'
-
-	means that the program is leaking memory in some way or another.
-
-- it IS possible to free the memory allocated by pthread_create with a proper use of pthread_join
-as indicated in pthread_create's manual, RTFM
-
-- Syscall errors caused by sem_open are a normal behavior"
+echo "Valgrind data_race tests finished to execute, check data_race.log"
 echo -ne $WHITE
