@@ -162,9 +162,10 @@ do
 	if (( error == 1 ))
 	then
 		echo -e $RED
-		echo FAIL
+		echo -n "TEST FAILED "
+		echo -e "\033[0;31m x	\033[0m"
 		echo "
-As the subject states it :
+If it is because of your output's format, please refer to the subject :
 
 Any state change of a philosopher must be formatted as follows:
 ◦ timestamp_in_ms X has taken a fork
@@ -174,19 +175,23 @@ Any state change of a philosopher must be formatted as follows:
 ◦ timestamp_in_ms X died
 Replace timestamp_in_ms with the current timestamp in milliseconds
 and X with the philosopher number.
+
+If it is because your timestamps are indeed not printing in the right order, please remember that time doesn't go backwards.
 "
 		echo -ne $WHITE
 	elif (( error == 2 ))
 	then
 		echo -e $RED
-		echo FAIL
+		echo -n "TEST FAILED "
+		echo -e "\033[0;31m x	\033[0m"
 		echo "
 For some reason, no output was caught for this philo, rerun tests outside of tester to check.
 "
 		echo -ne $WHITE
 	else
 		echo -e $GREEN
-		echo SUCCESS
+		echo -n "SUCCESS "
+		echo -e "\033[0;32m \xE2\x9C\x94	\033[0m"
 		echo -ne $WHITE
 	fi
     ((NB++))

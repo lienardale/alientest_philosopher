@@ -22,8 +22,8 @@ bash all_test.sh
 	- all of the above + norm (all_tests.sh)
 
 - ### How to read the output : 
-	green tick : test passed
-	red cross : test failed
+	green tick : test passed    
+	red cross : test failed    
 
 - ### check the log files :
 	- norm
