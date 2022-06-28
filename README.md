@@ -1,28 +1,48 @@
 # alientest_philosopher
 
-Clone this repo at your philosopher's root (at the same level of your philo_one, philo_two and philo_three directories).
+## Tester for 42_cursus "philosopher" project
 
-Basic usage : 'bash test.sh'
+## Usage
+- Clone this repository **at the root** of your philosopher's directory **without changig its name**
+```
+git clone https://github.com/lienardale/alientest_philosopher.git && cd alientest_philosopher
+```
+- Run the script of your choosing (while remaining in the tester's dir)
+```
+bash all_test.sh
+```
 
-How to read the output : 
+- ### It doesn't matter if you did the bonus or not, it's supposed to work either way (if not, dm me on slack @alienard)
+
+- ### available tests
+	- correction values (correction_test.sh)
+	- leaks (leak_test.sh)
+	- data-races (data_race_test.sh)
+	- timestamp order (order.sh)
+	- all of the above + norm (all_tests.sh)
+
+- ### How to read the output : 
 	green tick : test passed
 	red cross : test failed
 
-This tester is not enough to validate the project, remember to also test :
-- norm
-- each program without a 5th argument
-- check the coherence of the output
-- ask for explanations on the choices that were made and the issues encountered
+- ### check the log files :
+	- norm
+	- output
+	- leaks
+	- data_races
 
-To run only one test or valgrind with your own args, you can use :
-- bash one.sh 
-- bash valgrind.sh
-with the same args as if you were executing one of your philosophers + the nb of the philo you want to test as the first arg
-ex : "bash one.sh 1 2 10 5 5" (launches ./philo_one 2 10 5 5)
+## Warnings
+- This tester is not enough to validate the project, remember to also test :
+	- each program without a 5th argument
+	- check the coherence of the output
+	- ask for explanations on the choices that were made and the issues encountered
+- If you use this tester during this project
+```
+pgrep philo
+```
+will output the PID of every running philo process
+```
+pgrep philo | xargs kill
+```
+same but will also kill them
 
-To run only test.sh on only one philosopher, add the philosopher's nb in args.
-ex : 'bash test.sh 2' -> runs the script only for philo_two
-
-To run only valgrind tests : 'bash leak_test.sh'
-To run only leak_test.sh on only one philosopher, add the philosopher's nb in args.
-ex : 'bash leak_test.sh 2' -> runs the script only for philo_two

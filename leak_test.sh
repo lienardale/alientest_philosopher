@@ -10,7 +10,7 @@ WHITE="\033[97m"
 
 echo -e $YELLOW
 echo "If you are still developing and this tester causes you to have multiple processes still alive, use this to kill them :
- ' ps aux | grep -ie YOUR_PHILO_NAME | awk '{print $2}' | xargs kill -9 ' "
+ ' pgrep YOUR_PHILO_NAME | xargs kill ' "
 echo -ne $WHITE
 
 echo -e $YELLOW
@@ -31,8 +31,8 @@ else
     read  -n 1 -p "
 /!\ WARNING /!\\
 
-    You have selected tests for all philo, there is going to be a lot of forks involved for philo_three.
-    Be sure that you kill/exit most forks with manual tests + ''ps -ef | philo' before you go ahead.
+    You have selected tests for all philo, there is going to be a lot of forks involved for philo_three / philo_bonus.
+    Be sure that you kill/exit most forks with manual tests + ''pgrep | philo' before you go ahead.
     Otherwise, it could make your machine crash.
 
     If you are sure, press enter, if not, ctrl+C
